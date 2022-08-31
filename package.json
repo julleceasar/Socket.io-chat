@@ -1,0 +1,27 @@
+{
+  "name": "socket.io-chat",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "This is a chat using Socket.io &amp; node.js and is integrated with a external API.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/julleceasar/Socket.io-chat.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/julleceasar/Socket.io-chat/issues"
+  },
+  "homepage": "https://github.com/julleceasar/Socket.io-chat#readme",
+  "dependencies": {
+    "express": "^4.18.1",
+    "nodemon": "^2.0.19",
+    "socket.io": "^4.5.1"
+  }
+}
