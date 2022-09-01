@@ -5,11 +5,34 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Socket.io CHAT</title>
+    <link rel="stylesheet" href="./css/main.css">
     <!-- JS -->
     <script src="/socket.io/socket.io.js"></script>
     <script defer src="./js/logic.js"></script>
-</head>
+   
 <body>
-    <h1>Welcome to socket.io chat!</h1>
-</body>
+    <div class="maincontainer">
+
+        <div id="dashboard">
+
+        </div>
+
+        <div id="chat-container">
+
+            <ul class="chat-thread">
+
+                <li>TEST</li>
+                <li>TEST 2</li>
+
+                <form class="chat-window">
+                    <input class="chat-window-message" name="chat-window-message" type="text" autocomplete="off" autofocus />
+                </form>
+            </ul>
+        
+        </div>
+
+    </div>
+  
+  </body>
+</head>
 </html>
