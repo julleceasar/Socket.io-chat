@@ -8,11 +8,31 @@ const port = 3000;
 const io = new Server(httpServer);
 
 app.use("/", express.static("./client"));
+app.use(express.json())
 
-let users = []; // Users array
+
+let users = [
+    {
+        name: "julle",
+        age: 22
+    },
+    {
+        name: "Snabeln",
+        age: 26
+    }
+]; // Users array
+
+app.get('/test', (req, res) => {
+    res.send(users)
+})
 
 io.on("connection", (socket) => {
   console.log(`Socket witd ID: ${socket.id} has connected!`);
+
+  socket.on("message", (data) => {
+    console.log(data)
+    io.emit("message", data)
+})
 
   socket.on("login", ({ name, room }, callback) => {
     //socket.leave & socket.join
