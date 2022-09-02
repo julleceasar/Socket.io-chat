@@ -8,38 +8,33 @@ const port = 3000;
 const io = new Server(httpServer);
 
 app.use("/", express.static("./client"));
-app.use(express.json())
+app.use(express.json());
 
+const users = []; // Users array
 
-let users = [
-    {
-        name: "julle",
-        age: 22
-    },
-    {
-        name: "Snabeln",
-        age: 26
-    }
-]; // Users array
-
-app.get('/test', (req, res) => {
-    res.send(users)
-})
+app.get("/test", (req, res) => {
+  res.send(users);
+});
 
 io.on("connection", (socket) => {
   console.log(`Socket witd ID: ${socket.id} has connected!`);
 
+  socket.on("new-user", (name) => {
+    users[socket.id] = name;
+    socket.broadcast.emit("user-connected", name);
+  });
+
   socket.on("message", (data) => {
-    console.log(data)
-    io.emit("message", data)
-})
+    console.log(data);
+    io.emit("message", { message: data, name: users[socket.id] });
+  });
 
   socket.on("login", ({ name, room }, callback) => {
     //socket.leave & socket.join
     users.push({ username: socket.name, id: socket.id });
     console.log(users);
 
-    io.emit("update users", users, users.length);
+    io.emit("update-users", users, users.length);
     socket.broadcast.emit("user joined", socket.name);
   });
   socket.on("sendMessage", (message) => {
@@ -55,10 +50,14 @@ io.on("connection", (socket) => {
       socket.to(room).emit("chat message", msgObject);
     }
   });
-  socket.on("disconnect", () => {
-    socket.broadcast.emit("user disconnected", socket.name);
-    users.splice(users.indexOf(socket.name), 1); //Remove from users array
-    io.emit("update users", users, users.length);
+  socket.on("user-disconnect", (name) => {
+    socket.broadcast.emit("user-disconnected", name);
+    users.splice(users.indexOf(name), 1); //Remove from users array
+    io.emit("update-users", users, users.length);
+  });
+
+  socket.on("typing", (data) => {
+    socket.broadcast.emit("typing", data);
   });
 });
 
