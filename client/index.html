@@ -1,36 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Socket.io CHAT</title>
-    <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="./css/main.css" />
     <!-- JS -->
     <script src="/socket.io/socket.io.js"></script>
     <script defer src="./js/logic.js"></script>
-   
-<body>
-    <div class="maincontainer">
 
-        <div id="dashboard">
-
-
-        </div>
+    <body>
+      <div class="maincontainer">
+        <div id="dashboard"></div>
 
         <div id="chat-container">
-
-            <ul id="chatThread" class="chat-thread">
-
-                <form class="chat-window">
-                    <input id="msgInput" class="chat-window-message" name="chat-window-message"  type="text" autocomplete="off" autofocus />
-                </form>
-            </ul>
-        
+          <ul id="chatThread" class="chat-thread">
+            <li id="feedback"></li>
+          </ul>
+          <form class="chat-window">
+            <input
+              id="msgInput"
+              class="chat-window-message"
+              name="chat-window-message"
+              type="text"
+              autocomplete="off"
+              autofocus
+            />
+          </form>
         </div>
-
-    </div>
-  
-  </body>
-</head>
+      </div>
+    </body>
+  </head>
 </html>
