@@ -35,7 +35,33 @@ body {
   background-color: rgba(25, 147, 147, 0.2);
 }
 
-#chat-container {
+/* #dashboard{
+    height: 100v
+    width: 20%;
+    border-right: 1px solid white;
+    padding: 10px;
+}
+ */
+#optionsDiv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+    gap: 5px;
+    width: 500px;
+    padding: 20px;
+    padding: 20px;
+    overflow-x: scroll;
+    overflow-y: hidden;
+}
+
+img {
+    height: 100px;
+    width: 100px;
+}
+
+#chat-container {   
+  display: flex;  
   margin: 24px auto 0 auto;
   padding: 0 20px 0 0;
   list-style: none;
@@ -45,6 +71,8 @@ body {
 
 #feedback {
   display: none;
+  font-style: italic;
+  opacity: 50%;
 }
 
 .chat-thread {

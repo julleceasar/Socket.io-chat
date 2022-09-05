@@ -1,19 +1,27 @@
 import { createServer } from "http";
 import { Server } from "socket.io";
 import express from "express";
+import fetch from "node-fetch";
 
 const app = express();
 const httpServer = createServer(app);
 const port = 3000;
 const io = new Server(httpServer);
+const GIPHY_KEY = 'upq9NMruqNpiC0ZIYBAXu4bp2X5w0RDP'
+
 
 app.use("/", express.static("./client"));
 app.use(express.json());
 
 const users = []; // Users array
 
-app.get("/test", (req, res) => {
-  res.send(users);
+app.get("/test/", async (req, res) => {
+    const response = await fetch(
+        `http://api.giphy.com/v1/gifs/search?q=hot&api_key=${GIPHY_KEY}&limit=10`
+      );
+      const data = await response.json();
+      res.json(data);
+      /* res.send(response); */
 });
 
 io.on("connection", (socket) => {
@@ -28,6 +36,7 @@ io.on("connection", (socket) => {
     console.log(data);
     io.emit("message", { message: data, name: users[socket.id] });
   });
+
 
   socket.on("login", ({ name, room }, callback) => {
     //socket.leave & socket.join
