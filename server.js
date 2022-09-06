@@ -8,6 +8,7 @@ const app = express();
 const GIPHY_KEY = "upq9NMruqNpiC0ZIYBAXu4bp2X5w0RDP";
 const httpServer = createServer(app);
 const port = 3000;
+
 const io = new Server(httpServer, {
   cors: {
     origin: "*",
@@ -55,11 +56,9 @@ io.on("connection", (socket) => {
     io.emit("message", { message: data, img, name: users[socket.id] });
   });
 
+
   socket.on("user-disconnected", (name) => {
     socket.broadcast.emit("user-disconnect", name);
-    users.splice(users.indexOf(name), 1); //Remove from users array
-    io.emit("update-users", users, users.length);
-  });
 
   socket.on("typing", (data) => {
     socket.broadcast.emit("typing", data);
