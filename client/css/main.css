@@ -21,6 +21,25 @@ body {
   background-attachment: fixed;
 }
 
+img {
+  height: 100px;
+  width: 100px;
+  cursor: pointer;
+
+}
+
+p{
+  cursor: pointer;
+}
+
+p:hover{
+  opacity: 50%;
+}
+
+h2{
+  cursor: pointer;
+}
+
 ::-webkit-scrollbar {
   width: 10px;
 }
@@ -34,6 +53,24 @@ body {
   border-radius: 10px;
   background-color: rgba(25, 147, 147, 0.2);
 }
+
+#optionsDiv {
+  clear: both;
+  display: flex;
+  flex-direction: column;
+  padding: 30px;
+  margin: 0 0 20px 0;
+  font: 16px/20px "Noto Sans", sans-serif;
+  background-color: rgba(25, 147, 147, 0.2);
+  color: #0ad5c1;
+  width: 90%;
+  height: 90px;
+  align-items: flex-start;
+  justify-content: center;
+  overflow-x: scroll;
+  overflow-y: hidden;
+}
+
 
 #chat-container {
   margin: 24px auto 0 auto;
@@ -53,6 +90,7 @@ body {
   list-style: none;
   overflow-y: scroll;
   overflow-x: hidden;
+  height: 80vh;
 }
 
 .chat-thread li {
@@ -160,7 +198,6 @@ body {
 @media all and (min-width: 768px) {
   .chat-thread {
     width: 50%;
-    height: 1000px;
   }
 
   .chat-window {
