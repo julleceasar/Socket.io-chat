@@ -3,17 +3,11 @@ const socket = io();
 const msgInput = document.getElementById("msgInput");
 const msgDiv = document.getElementById("chatThread");
 const feedback = document.getElementById("feedback");
-const chatWindow = document.getElementById('chatWindow')
-
-const optionsDiv = document.createElement('div')
-optionsDiv.setAttribute('id', 'optionsDiv')
-
 
 const optionsDiv = document.createElement("div");
 optionsDiv.setAttribute("id", "optionsDiv");
 
 msgInput.addEventListener("keypress", (e) => {
-
   if (e.key === "Enter") {
     e.preventDefault();
     sendMsg();
@@ -26,14 +20,7 @@ msgInput.addEventListener("keypress", (e) => {
   }
 });
 
-msgInput.addEventListener('keyup', () => {
-    if (msgInput.value == '') {
-        optionsDiv.style.display = 'none'
-    }
-})
-
 msgInput.addEventListener("keyup", () => {
-
   if (msgInput.value == "") {
     optionsDiv.style.display = "none";
     optionsDiv.innerHTML = "";
@@ -132,52 +119,23 @@ function showCommands() {
   jokes.addEventListener("click", showJokes);
   optionsDiv.style.flexDirection = "column";
 
-  //fix the issue that shows the gifs before choosing between stickers and jokes!
-    
-});
-
-
-
-
-async function sendReq() {
-    let url = `http://localhost:3000/test/`;
-    let method = "GET";
-    let result = await makeRequest(url, method, undefined);
-    console.log(result);
-    optionsDiv.innerHTML = ''
-    result.data.forEach(gif => {
-        let gifDiv = document.createElement('div')
-        let gifImg = document.createElement('img')
-        gifImg.src = gif.images.downsized.url
-        gifDiv.append(gifImg)
-        optionsDiv.append(gifDiv)
-        msgInput.before(optionsDiv)
-
-        gifImg.addEventListener('click', () => {
-            socket.emit('gif', gif.images.downsized.url)
-        })
-    });
+  //fix the issue that shows the gifs before choosing between stickers and jokes!!
 }
 
-
-
-
 socket.on("newSocket", (socketId) => {
-    console.log("New socket connected: " + socketId);
+  console.log("New socket connected: " + socketId);
 });
 
 socket.on("message", (data) => {
-
   console.log(data);
   displayMsgSent(data);
 });
 
 socket.on("typing", (data) => {
-    displayTyping(data);
+  displayTyping(data);
 });
 
 socket.on("user-connected", (name) => {
-
   showConnection(`${name} joined!`);
 });
 
@@ -186,15 +144,14 @@ socket.on("user-disconnect", (name) => {
 });
 
 const sendMsg = () => {
-    if (msgInput.value == "") {
-        return;
-    } else {
-        socket.emit("message", msgInput.value);
-        msgInput.value = "";
-        console.log(msgInput.value);
-    }
+  if (msgInput.value == "") {
+    return;
+  } else {
+    socket.emit("message", msgInput.value);
+    msgInput.value = "";
+    console.log(msgInput.value);
+  }
 };
-
 
 const displayMsgSent = (msgToDisplay) => {
   console.log(msgToDisplay);
@@ -231,7 +188,7 @@ const displayMsgSent = (msgToDisplay) => {
     msgText.innerText = `${msgToDisplay.name}: ${msgToDisplay.message}`;
     feedback.before(msgText);
   }
-  };
+};
 
 const name = window.prompt("What is your name?");
 showConnection("You joined!");
@@ -244,15 +201,14 @@ function showConnection(data) {
 }
 
 const displayTyping = (data) => {
-    feedback.style.display = "flex";
-    feedback.innerText = "User is typing...";
-    msgDiv.scrollTop = msgDiv.scrollHeight;
-    console.log(data);
+  feedback.style.display = "flex";
+  feedback.innerText = "User is typing...";
+  console.log(data);
 
-    if (data.length == 0) {
-        feedback.style.display = "none";
-        feedback.innerText = "";
-    }
+  if (data.length == 0) {
+    feedback.style.display = "none";
+    feedback.innerText = "";
+  }
 };
 
 async function makeRequest(url, method, body) {
@@ -265,10 +221,10 @@ async function makeRequest(url, method, body) {
       body,
     });
     let result = await response.json();
-    console.log(result.joke)
+    console.log(result.setup);
+    console.log(result.delivery);
     return result;
   } catch (err) {
     console.error(err);
   }
-
 }

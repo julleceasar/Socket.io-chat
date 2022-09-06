@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,8 +10,9 @@
     <script src="/socket.io/socket.io.js"></script>
     <script defer src="./js/logic.js"></script>
 
-<body>
-    <div class="maincontainer">
+    <body>
+      <div class="maincontainer">
+        <div id="dashboard"></div>
 
         <div id="chat-container">
           <ul id="chatThread" class="chat-thread">
@@ -29,21 +29,8 @@
               autofocus
             />
           </form>
-            <div id="dashboard">
-                <h1>Rooms</h1>
-                <h1>Users</h1>
-            </div>
-
-            <ul id="chatThread" class="chat-thread">
-                <li id="feedback"></li>
-            </ul>
-            <form id="chatWindow" class="chat-window">
-                <input id="msgInput" class="chat-window-message" name="chat-window-message" type="text"
-                    autocomplete="off" autofocus />
-            </form>
         </div>
-    </div>
-</body>
-</head>
-
+      </div>
+    </body>
+  </head>
 </html>

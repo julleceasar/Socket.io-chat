@@ -54,7 +54,6 @@ h2{
   background-color: rgba(25, 147, 147, 0.2);
 }
 
-
 #optionsDiv {
   clear: both;
   display: flex;
@@ -72,17 +71,8 @@ h2{
   overflow-y: hidden;
 }
 
-/* #dashboard{
-    height: 100v
-    width: 20%;
-    border-right: 1px solid white;
-    padding: 10px;
-}
- */
 
-
-#chat-container {   
-  display: flex;  
+#chat-container {
   margin: 24px auto 0 auto;
   padding: 0 20px 0 0;
   list-style: none;
@@ -92,8 +82,6 @@ h2{
 
 #feedback {
   display: none;
-  font-style: italic;
-  opacity: 50%;
 }
 
 .chat-thread {
