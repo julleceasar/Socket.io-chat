@@ -66,7 +66,6 @@ h2{
   width: 90%;
   height: 90px;
   align-items: flex-start;
-  justify-content: center;
   overflow-x: scroll;
   overflow-y: hidden;
 }
@@ -90,7 +89,7 @@ h2{
   list-style: none;
   overflow-y: scroll;
   overflow-x: hidden;
-  height: 80vh;
+  height: 75vh;
 }
 
 .chat-thread li {

@@ -51,7 +51,7 @@ const onInput = (event) => {
       console.log(timer);
       showGifs();
     }
-  }, 500);
+  }, 100);
 };
 document.getElementsByTagName("input")[0].addEventListener("input", onInput);
 
@@ -62,6 +62,10 @@ msgInput.addEventListener("keyup", () => {
 async function showGifs() {
   let searchWord = msgInput.value.substring(1);
   optionsDiv.style.flexDirection = "row";
+  optionsDiv.style.overflowX = 'scroll'
+  optionsDiv.style.overflowY = 'hidden'
+  optionsDiv.style.justifyContent = 'unset'
+
 
   if (searchWord === "") {
     searchWord = "Trending";
@@ -91,7 +95,9 @@ async function showJokes() {
   let method = "GET";
   let result = await makeRequest(url, method);
   optionsDiv.style.flexDirection = "column";
-  optionsDiv.style.height = "90%";
+  optionsDiv.style.overflowX = 'hidden'
+  optionsDiv.style.overflowY = 'scroll'
+  optionsDiv.style.justifyContent = 'unset'
   optionsDiv.innerHTML = "";
   console.log(result);
   result.jokes.forEach((joke) => {
@@ -118,6 +124,9 @@ function showCommands() {
   gifs.addEventListener("click", showGifs);
   jokes.addEventListener("click", showJokes);
   optionsDiv.style.flexDirection = "column";
+  optionsDiv.style.overflowX = 'hidden'
+  optionsDiv.style.justifyContent = 'center'
+
 
   //fix the issue that shows the gifs before choosing between stickers and jokes!!
 }
@@ -202,7 +211,7 @@ function showConnection(data) {
 
 const displayTyping = (data) => {
   feedback.style.display = "flex";
-  feedback.innerText = "User is typing...";
+  feedback.innerText = `Someone is typing...`;
   console.log(data);
 
   if (data.length == 0) {

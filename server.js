@@ -22,8 +22,8 @@ const users = []; // Users array
 app.get("/gifs/:data", async (req, res) => {
   let url =
     req.params.data == "Trending"
-      ? `http://api.giphy.com/v1/stickers/trending?api_key=${GIPHY_KEY}&limit=9`
-      : `http://api.giphy.com/v1/stickers/search?q=${req.params.data}&api_key=${GIPHY_KEY}&limit=9`;
+      ? `http://api.giphy.com/v1/stickers/trending?api_key=${GIPHY_KEY}&limit=15`
+      : `http://api.giphy.com/v1/stickers/search?q=${req.params.data}&api_key=${GIPHY_KEY}&limit=15`;
 
   console.log(url);
 
@@ -55,7 +55,7 @@ io.on("connection", (socket) => {
     io.emit("message", { message: data, img, name: users[socket.id] });
   });
 
-  socket.on("user-disconnected", (name) => {
+  socket.on("user-disconnect", (name) => {
     socket.broadcast.emit("user-disconnect", name);
     users.splice(users.indexOf(name), 1); //Remove from users array
     io.emit("update-users", users, users.length);
