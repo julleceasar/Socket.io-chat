@@ -46,23 +46,26 @@ io.on("connection", (socket) => {
   console.log(`Socket witd ID: ${socket.id} has connected!`);
 
   socket.on("new-user", (name) => {
-    users[socket.id] = name;
+    socket.nickname = name;
     socket.broadcast.emit("user-connected", name);
   });
 
   socket.on("message", (data, img) => {
     console.log(data);
-    io.emit("message", { message: data, img, name: users[socket.id] });
+    io.emit("message", { message: data, img, name: socket.nickname });
   });
 
-  socket.on("user-disconnect", (name) => {
-    socket.broadcast.emit("user-disconnect", name);
+  socket.on("disconnect", (name) => {
+    io.emit("message", { message: socket.nickname + ' has left!', name: "" });
+   /*  socket.broadcast.emit('user-disconnected', {name: socket.nickname}) */
+
     users.splice(users.indexOf(name), 1); //Remove from users array
     io.emit("update-users", users, users.length);
+    //adapt
   });
 
-  socket.on("typing", (data) => {
-    socket.broadcast.emit("typing", data);
+  socket.on("typing", (data, name) => {
+    socket.broadcast.emit("typing", data, name);
   });
 
   /*   socket.on('gifs', async (data) => {
