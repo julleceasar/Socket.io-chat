@@ -7,6 +7,12 @@ const feedback = document.getElementById("feedback");
 const optionsDiv = document.createElement("div");
 optionsDiv.setAttribute("id", "optionsDiv");
 
+/* msgInput.addEventListener("keydown", () => {
+  if (msgInput.value === "/stickers " || msgInput.value === "/jokes" && e.key === "Backspace") {
+    msgInput.value = ''
+  }
+});
+ */
 msgInput.addEventListener("keypress", (e) => {
   if (e.key === "Enter") {
     e.preventDefault();
@@ -40,38 +46,47 @@ const onInput = (event) => {
 
   if (timer) {
     clearTimeout(timer);
-    optionsDiv.innerHTML = "";
   }
 
-  timer = setTimeout(() => {
-    if (event.target.value === "") {
-      clearTimeout(timer);
-      return;
-    } else {
-      console.log(timer);
-      showGifs();
-    }
-  }, 100);
+  if (event.target.value.startsWith("/stickers")) {
+    timer = setTimeout(() => {
+      showGifs(searchStringGenerator(event.target.value));
+      timer = undefined;
+    }, 400);
+  }
+
+  if (event.target.value === "/jokes") {
+    clearTimeout(timer);
+    showJokes();
+  }
 };
+
+const searchStringGenerator = (rawString) => {
+  let stringArray = rawString.split(" ");
+
+  let searchText = rawString.substring(rawString.indexOf(" ") + 1);
+
+  if (stringArray.length == 1 || !searchText.length) {
+    searchText = "Trending";
+  }
+
+  return searchText;
+};
+
 document.getElementsByTagName("input")[0].addEventListener("input", onInput);
 
 msgInput.addEventListener("keyup", () => {
-  socket.emit("typing", msgInput.value);
+  socket.emit("typing", msgInput.value, name);
 });
 
-async function showGifs() {
-  let searchWord = msgInput.value.substring(1);
+async function showGifs(searchText) {
   optionsDiv.style.flexDirection = "row";
-  optionsDiv.style.overflowX = 'scroll'
-  optionsDiv.style.overflowY = 'hidden'
-  optionsDiv.style.justifyContent = 'unset'
+  optionsDiv.style.overflowX = "scroll";
+  optionsDiv.style.overflowY = "hidden";
+  optionsDiv.style.justifyContent = "unset";
 
-
-  if (searchWord === "") {
-    searchWord = "Trending";
-  }
-
-  let url = `http://localhost:3000/gifs/${searchWord}`;
+  //elseif or another if
+  let url = `http://localhost:3000/gifs/${searchText}`;
   let method = "GET";
   let result = await makeRequest(url, method, undefined);
 
@@ -82,7 +97,7 @@ async function showGifs() {
     gifImg.src = gif.images.downsized.url;
     gifDiv.append(gifImg);
     optionsDiv.append(gifDiv);
-    msgInput.before(optionsDiv);
+
     gifImg.addEventListener("click", () => {
       let img = true;
       socket.emit("message", gif.images.downsized.url, img);
@@ -91,13 +106,16 @@ async function showGifs() {
 }
 
 async function showJokes() {
+  if (msgInput.value === "/") {
+    msgInput.value = "/jokes";
+  }
   let url = `http://localhost:3000/jokes`;
   let method = "GET";
   let result = await makeRequest(url, method);
   optionsDiv.style.flexDirection = "column";
-  optionsDiv.style.overflowX = 'hidden'
-  optionsDiv.style.overflowY = 'scroll'
-  optionsDiv.style.justifyContent = 'unset'
+  optionsDiv.style.overflowX = "hidden";
+  optionsDiv.style.overflowY = "scroll";
+  optionsDiv.style.justifyContent = "unset";
   optionsDiv.innerHTML = "";
   console.log(result);
   result.jokes.forEach((joke) => {
@@ -124,9 +142,8 @@ function showCommands() {
   gifs.addEventListener("click", showGifs);
   jokes.addEventListener("click", showJokes);
   optionsDiv.style.flexDirection = "column";
-  optionsDiv.style.overflowX = 'hidden'
-  optionsDiv.style.justifyContent = 'center'
-
+  optionsDiv.style.overflowX = "hidden";
+  optionsDiv.style.justifyContent = "center";
 
   //fix the issue that shows the gifs before choosing between stickers and jokes!!
 }
@@ -140,17 +157,17 @@ socket.on("message", (data) => {
   displayMsgSent(data);
 });
 
-socket.on("typing", (data) => {
-  displayTyping(data);
+socket.on("typing", (data, name) => {
+  displayTyping(data, name);
 });
 
 socket.on("user-connected", (name) => {
   showConnection(`${name} joined!`);
 });
 
-socket.on("user-disconnect", (name) => {
-  displayMsgSent(`${name} left!`);
-});
+/* socket.on("user-disconnected", (name) => {
+  showConnection(`${name} left!`);
+}); */
 
 const sendMsg = () => {
   if (msgInput.value == "") {
@@ -165,7 +182,13 @@ const sendMsg = () => {
 const displayMsgSent = (msgToDisplay) => {
   console.log(msgToDisplay);
 
-  msgDiv.scrollTop = msgDiv.scrollHeight;
+  if (msgToDisplay.name === "") {
+    const msgText = document.createElement("li");
+    msgText.innerText = `${msgToDisplay.message}`;
+    feedback.before(msgText);
+    msgDiv.scrollTop = msgDiv.scrollHeight;
+  }
+
   if (msgToDisplay.img === true && msgToDisplay.name == name) {
     const msgText = document.createElement("li");
     let img = document.createElement("img");
@@ -174,6 +197,7 @@ const displayMsgSent = (msgToDisplay) => {
     img.src = msgToDisplay.message;
     msgText.append(name, img);
     feedback.before(msgText);
+    msgDiv.scrollTop = msgDiv.scrollHeight;
   }
 
   if (msgToDisplay.img === true && msgToDisplay.name !== name) {
@@ -184,18 +208,21 @@ const displayMsgSent = (msgToDisplay) => {
     img.src = msgToDisplay.message;
     msgText.append(name, img);
     feedback.before(msgText);
+    msgDiv.scrollTop = msgDiv.scrollHeight;
   }
 
   if (msgToDisplay.name == name && !msgToDisplay.img) {
     const msgText = document.createElement("li");
     msgText.innerText = `You: ${msgToDisplay.message}`;
     feedback.before(msgText);
+    msgDiv.scrollTop = msgDiv.scrollHeight;
   }
 
   if (msgToDisplay.name !== name && !msgToDisplay.img) {
     const msgText = document.createElement("li");
     msgText.innerText = `${msgToDisplay.name}: ${msgToDisplay.message}`;
     feedback.before(msgText);
+    msgDiv.scrollTop = msgDiv.scrollHeight;
   }
 };
 
@@ -209,15 +236,16 @@ function showConnection(data) {
   feedback.before(msgText);
 }
 
-const displayTyping = (data) => {
+const displayTyping = (data, name) => {
   feedback.style.display = "flex";
-  feedback.innerText = `Someone is typing...`;
-  console.log(data);
+  feedback.innerText = name + " is typing...";
+  console.log(name);
 
   if (data.length == 0) {
     feedback.style.display = "none";
     feedback.innerText = "";
   }
+  msgDiv.scrollTop = msgDiv.scrollHeight;
 };
 
 async function makeRequest(url, method, body) {
