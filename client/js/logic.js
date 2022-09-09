@@ -7,12 +7,6 @@ const feedback = document.getElementById("feedback");
 const optionsDiv = document.createElement("div");
 optionsDiv.setAttribute("id", "optionsDiv");
 
-/* msgInput.addEventListener("keydown", () => {
-  if (msgInput.value === "/stickers " || msgInput.value === "/jokes" && e.key === "Backspace") {
-    msgInput.value = ''
-  }
-});
- */
 msgInput.addEventListener("keypress", (e) => {
   if (e.key === "Enter") {
     e.preventDefault();
@@ -54,7 +48,7 @@ const onInput = (event) => {
       timer = undefined;
     }, 400);
   }
-
+  
   if (event.target.value === "/jokes") {
     clearTimeout(timer);
     showJokes();
@@ -63,13 +57,12 @@ const onInput = (event) => {
 
 const searchStringGenerator = (rawString) => {
   let stringArray = rawString.split(" ");
-
+  
   let searchText = rawString.substring(rawString.indexOf(" ") + 1);
 
   if (stringArray.length == 1 || !searchText.length) {
     searchText = "Trending";
   }
-
   return searchText;
 };
 
@@ -80,12 +73,19 @@ msgInput.addEventListener("keyup", () => {
 });
 
 async function showGifs(searchText) {
+
+  if (msgInput.value === '/') {
+  msgInput.value = '/stickers'
+  searchText = 'Trending'
+  }
+
+  
+  msgInput.focus()
   optionsDiv.style.flexDirection = "row";
   optionsDiv.style.overflowX = "scroll";
   optionsDiv.style.overflowY = "hidden";
   optionsDiv.style.justifyContent = "unset";
 
-  //elseif or another if
   let url = `http://localhost:3000/gifs/${searchText}`;
   let method = "GET";
   let result = await makeRequest(url, method, undefined);
@@ -106,6 +106,7 @@ async function showGifs(searchText) {
 }
 
 async function showJokes() {
+  msgInput.focus()
   if (msgInput.value === "/") {
     msgInput.value = "/jokes";
   }
@@ -144,8 +145,6 @@ function showCommands() {
   optionsDiv.style.flexDirection = "column";
   optionsDiv.style.overflowX = "hidden";
   optionsDiv.style.justifyContent = "center";
-
-  //fix the issue that shows the gifs before choosing between stickers and jokes!!
 }
 
 socket.on("newSocket", (socketId) => {
@@ -165,9 +164,9 @@ socket.on("user-connected", (name) => {
   showConnection(`${name} joined!`);
 });
 
-/* socket.on("user-disconnected", (name) => {
+socket.on("user-disconnected", (name) => {
   showConnection(`${name} left!`);
-}); */
+});
 
 const sendMsg = () => {
   if (msgInput.value == "") {
@@ -181,13 +180,6 @@ const sendMsg = () => {
 
 const displayMsgSent = (msgToDisplay) => {
   console.log(msgToDisplay);
-
-  if (msgToDisplay.name === "") {
-    const msgText = document.createElement("li");
-    msgText.innerText = `${msgToDisplay.message}`;
-    feedback.before(msgText);
-    msgDiv.scrollTop = msgDiv.scrollHeight;
-  }
 
   if (msgToDisplay.img === true && msgToDisplay.name == name) {
     const msgText = document.createElement("li");

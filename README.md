@@ -43,11 +43,11 @@ Carefully read through the entire task description together before you begin.
 
 2. When someone writes, it must be visible to others. ✅
 
-3. It must be possible to create new rooms.
+3. It must be possible to create new rooms.  ❌
 
-4. All available rooms must be displayed in a list. The client must be able to join the room by clicking on the room.
+4. All available rooms must be displayed in a list. The client must be able to join the room by clicking on the room. ❌
 
-5. When you join a room, there should be a list that shows all the nicknames of those in the current room.
+5. When you join a room, there should be a list that shows all the nicknames of those in the current room. ❌
 
 6. There must be at least 2 commands (at least two different 3-party APIs). ✅
 
